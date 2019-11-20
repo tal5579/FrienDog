@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text , TouchableOpacity , View } from 'react-native';
+import { Text , TouchableOpacity , View ,KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import { f , auth , database } from '../../config/config';
 import Button from '../HelpComponents/Button';
 import Card from '../HelpComponents/Card';
@@ -7,7 +7,11 @@ import CardSection from '../HelpComponents/CardSection';
 import Input from '../HelpComponents/Input';
 import Logo from '../HelpComponents/Logo';
 
-
+const DismissKeyboard = ({children}) => (
+  <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
+    {children}
+  </TouchableWithoutFeedback>
+)
 
 class LoginScreen extends Component {
   state = { email: '', password: '', error: '', loading: false };
@@ -89,6 +93,8 @@ class LoginScreen extends Component {
   render() {
     
     return (
+    <DismissKeyboard>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View style = {{ flex : 1 ,justifyContent : 'center' , alignItems : 'stretch' }}>
         <Logo />
         { this.state.loggedin == true ? (
@@ -115,7 +121,6 @@ class LoginScreen extends Component {
                   onChangeText = {password => this.setState({ password })}
                 />
               </CardSection>
-              
               <CardSection>
                 <Button
                   onPress = { () => this.loginUser(this.state.email , this.state.password) }>
@@ -154,10 +159,12 @@ class LoginScreen extends Component {
 
               </View>
             )} 
+          
           </View>
         )}
       </View>
-      
+    </KeyboardAvoidingView>
+    </DismissKeyboard>
      
     );
   }
@@ -166,6 +173,10 @@ class LoginScreen extends Component {
 
 
 const styles = {
+  container:{
+    flex:1,
+    Backgroundcolor:'#3498db'
+  },
   errorTextStyle: {
     fontSize:20,
     alignSelf: 'center',

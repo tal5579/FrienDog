@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
-import { Text, View, Image, StyleSheet} from 'react-native';
+import { Text, View, Image,KeyboardAvoidingView ,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import Button from '../HelpComponents/Button';
 import CardSection from '../HelpComponents/CardSection';
 import Input from '../HelpComponents/Input';
 import { f , auth , database } from '../../config/config';
 import LoginScreen from './LoginScreen';
+import CreateUser from './CreateUser';
+
+const DismissKeyboard = ({children}) => (
+  <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
+    {children}
+  </TouchableWithoutFeedback>
+)
 
 class SignUpScreen extends Component {
   constructor(props) {
@@ -27,7 +34,7 @@ class SignUpScreen extends Component {
         if( password == confirmPass && password != '')
         {
             if(this.registerUser(this.state.email, this.state.password ) == true ){
-                this.props.navigation.navigate('Login')
+                this.props.navigation.navigate('CreateUser')
             }
             else{
                 this.props.navigation.navigate('SignUp')
@@ -44,7 +51,7 @@ class SignUpScreen extends Component {
 
     console.log(email, password);
       auth.createUserWithEmailAndPassword(email, password)
-      .then((userObj) => this.props.navigation.navigate('Login'))
+      .then((userObj) => this.props.navigation.navigate('CreateUser'))
       .catch(error => {
         
         switch (error.code) {
@@ -76,11 +83,12 @@ class SignUpScreen extends Component {
   }
   render() {
     return (
+    <DismissKeyboard>
+    <KeyboardAvoidingView behavior="padding" style={styles.container2}>
       <View>
-          
-            <CardSection>
-              <Text style={{fontSize : 30}}> Sign Up with Email : </Text>
-            </CardSection>
+            <Image
+                style={styles.logo}
+                source={require('../../assets/SignUp.jpeg')}/>
             <CardSection >
               <Input
                 placeholder= "Dog's Name"
@@ -100,12 +108,10 @@ class SignUpScreen extends Component {
                 placeholder="user@gmail.com"
                 lable="Email :"
                 onChangeText={email => this.setState({ email })}
-                
               />
             </CardSection>
             <CardSection>
               <Input
-                
                 secureTextEntry
                 placeholder= {"Password"}
                 lable="Password :"
@@ -128,26 +134,25 @@ class SignUpScreen extends Component {
                 Enter
               </Button>
             </CardSection>
-          <View style={styles.container}>
-            <Text></Text>
-            <Image
-                style={styles.logo}
-                source={require('../../assets/SignUp.jpeg')}/>
-          </View>
       </View>  
+    </KeyboardAvoidingView>
+    </DismissKeyboard>
     );
     }
 };
 
-const styles = StyleSheet.create ({
+const styles = {
   logo: {
-    width:480,
-    height:400
+    width:400,
+    height:300
     },
     container: {
       justifyContent: 'center',
       alignItems: 'stretch'
+    },
+    container2:{
+      flex:1,
+      Backgroundcolor:'#3498db'
     }
   }
-);
 export default SignUpScreen;

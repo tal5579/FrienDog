@@ -87,7 +87,7 @@ class Feed extends Component{
                 var photo_feed = that.state.photo_feed;
                 for(var photo in data){
                     var photoObj = data[photo];
-                    database.ref('users').child(photoObj.author).once('value').then(function(snapshot){
+                    database.ref('users').child(photoObj.author).child('username').once('value').then(function(snapshot){
                         const exists = (snapshot.val() !== null);
                         if(exists) data= snapshot.val();
                             photo_feed.push({
@@ -95,7 +95,7 @@ class Feed extends Component{
                                 url: photoObj.url,
                                 caption: photoObj.caption,
                                 posted: that.timeConverter(photoObj.posted),
-                                author: data.username
+                                author: data
                             });
                             that.setState({
                                 refresh: false,

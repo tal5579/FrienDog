@@ -14,6 +14,7 @@ import LoginScreen from './src/screens/LoginScreen.js';
 import { f , auth , database } from './config/config';
 import SignUpScreen from './src/screens/SignUpScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
+import CreateUser from './src/screens/CreateUser';
 
 
 
@@ -243,6 +244,22 @@ const ForgotPasswordStackNavigator = createStackNavigator (
   }
 )
 
+const CreateUserStackNavigator = createStackNavigator (
+  {
+    CreateUser : {screen : CreateUser , navigationOptions : ({navigation}) => {
+      return {
+        headerTitle : () => <LogoTitle />,
+        headerLeft : (
+          <Button 
+          title = "Go back"
+          onPress = { () => navigation.navigate('Login')}> 
+          </Button>
+        )
+      }
+    }}
+  }
+)
+
 const AppSwitchNavigator = createSwitchNavigator(
   {
     First: {screen : FirstStackNavigator },
@@ -250,7 +267,8 @@ const AppSwitchNavigator = createSwitchNavigator(
     //
     Login : {screen : LoginStackNavigator },
     SignUp : {screen : SignUpStackNavigator},
-    ForgotPasswordScreen : {screen : ForgotPasswordStackNavigator}
+    ForgotPasswordScreen : {screen : ForgotPasswordStackNavigator},
+    CreateUser : {screen : CreateUserStackNavigator}
   }
   
 )
