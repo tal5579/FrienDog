@@ -8,13 +8,19 @@ import { createTabNavigator , createBottomTabNavigator} from 'react-navigation-t
 import Feed from './src/screens/Feed';
 import Profile from './src/screens/Profile';
 import Upload from './src/screens/Upload';
-import Icon from '@expo/vector-icons/Ionicons';
+import Chat from './src/screens/Chat';
+import { Ionicons } from '@expo/vector-icons';
 import FirstScreen from './src/screens/FirstScreen.js';
 import LoginScreen from './src/screens/LoginScreen.js';
 import { f , auth , database } from './config/config';
 import SignUpScreen from './src/screens/SignUpScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
-import CreateUser from './src/screens/CreateUser';
+import Comments from './src/screens/Comments';
+import DogProfile from './src/screens/DogProfile';
+import MatchScreen from './src/screens/MatchScreen';
+import ShopScreen from './src/screens/ShopScreen';
+import VetScreen from './src/screens/VetScreen';
+
 
 
 
@@ -69,15 +75,56 @@ const FeedStack = createStackNavigator({
       return{
         headerTitle: 'Feed',
         headerLeft: (
-          <Icon
-          style = {{paddingLeft : 10 }}
-          onPress = { () => navigation.openDrawer()}
-          name = "md-menu"
-          size = {30} />
+          <Ionicons name="md-camera" size={32} style = {{paddingLeft : 10 }}
+          onPress = { () => navigation.navigate("Upload")}/>
+        ),
+        headerRight: (
+          <Ionicons name="md-paper-plane" size={32} style = {{paddingRight : 10 }}
+          onPress = { () => navigation.navigate("Chat")}/>
         )
       }
     }
   },
+  DogProfile : {screen : DogProfile , navigationOptions : ({navigation}) => {
+    return {
+      header:null,
+      /*headerLeft : (
+        <Button 
+        title = "Go back"
+        onPress = { () => navigation.goBack()}> 
+        </Button>
+        )*/
+      }
+  }},
+
+  Upload : {screen : Upload , navigationOptions : ({navigation}) => {
+    return {
+      headerTitle : null,
+      headerLeft : (
+        <Ionicons name="md-arrow-back" size={32} style = {{paddingLeft : 10 }} onPress = { () => navigation.goBack()}/>
+      )
+    }
+  }},
+
+  Chat : {screen : Chat , navigationOptions : ({navigation}) => {
+    return {
+      headerTitle : null,
+      headerLeft : (
+        <Ionicons name="md-arrow-back" size={32} style = {{paddingLeft : 10 }} onPress = { () => navigation.goBack()}/>
+      )
+    }
+  }},
+
+  Comments : {screen : Comments , navigationOptions : ({navigation}) => {
+    return {
+      header: null,
+      headerTitle : () => <LogoTitle />,
+      headerLeft : (
+        <Ionicons name="md-arrow-back" size={32} style = {{paddingLeft : 10 }} onPress = { () => navigation.goBack()}/>
+      )
+    }
+  }},
+
   Detail: {
     screen: Detail
   } 
@@ -95,45 +142,106 @@ const ProfileStack = createStackNavigator({
     navigationOptions: ({navigation}) => {
       return{
         headerTitle: 'Profile',
-        headerLeft: (
-          <Icon
-          style = {{paddingLeft : 10 }}
-          onPress = { () => navigation.openDrawer()}
-          name = "md-menu"
-          size = {30} />
+        headerRight: (
+          <Ionicons name="md-cog" size={32} style = {{paddingRight : 10 }}/>
         )
       }
     }
-  },
-
+  }
 });
 
-const Images = [src='./', 'uri 2', 'uri 3', 'uri 4']
-
-const UploadStack = createStackNavigator({
-  Upload:{
-    screen : Upload,
+const MatchScreenStack = createStackNavigator({
+  MatchScreen:{
+    screen : MatchScreen,
     navigationOptions: ({navigation}) => {
       return{
-        headerTitle: 'Upload',
-        headerLeft: (
-          <Icon
-          style = {{paddingLeft : 10 }}
-          onPress = { () => navigation.openDrawer()}
-          name = "md-menu"
-          size = {30} />
+        headerTitle: 'MatchScreen',
+        headerRight: (
+          <Ionicons name="md-cog" size={32} style = {{paddingRight : 10 }}/>
         )
       }
     }
-  },
+  }
+});
 
+const ShopScreenStack = createStackNavigator({
+  ShopScreen:{
+    screen : ShopScreen,
+    navigationOptions: ({navigation}) => {
+      return{
+        headerTitle: 'ShopScreen',
+        headerRight: (
+          <Ionicons name="md-cog" size={32} style = {{paddingRight : 10 }}/>
+        )
+      }
+    }
+  }
+});
+
+const VetScreenStack = createStackNavigator({
+  VetScreen:{
+    screen : VetScreen,
+    navigationOptions: ({navigation}) => {
+      return{
+        headerTitle: 'VetScreen',
+        headerRight: (
+          <Ionicons name="md-cog" size={32} style = {{paddingRight : 10 }}/>
+        )
+      }
+    }
+  }
 });
 
 const DashboardTabNavigator = createBottomTabNavigator(
   {
-    FeedStack,
-    UploadStack,
-    ProfileStack
+    Home : {
+      screen: FeedStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="md-home" size={32}/>
+        )
+      }
+
+    },
+
+    Match : {
+      screen: MatchScreenStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="md-bed" size={32}/>
+        )
+      }
+
+    },
+
+    Vet : {
+      screen: VetScreenStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="md-medkit" size={32}/>
+        )
+      }
+
+    },
+
+    Shop : {
+      screen: ShopScreenStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="md-cart" size={32}/>
+        )
+      }
+
+    },
+
+    Profile : {
+      screen: ProfileStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="md-paw" size={32}/>
+        )
+      }
+    }
   },
   { 
     navigationOptions: ({navigation}) => {
@@ -156,12 +264,8 @@ const DashboardStackNavigator = createStackNavigator(
     defaultNavigationOptions : ({navigation}) => {
       return {
         headerLeft :(
-          <Icon
-            style = {{paddingLeft : 10 }}
-            onPress = { () => navigation.openDrawer()}
-            name = "md-menu"
-            size = {30} />
-        ) 
+          <Ionicons name="md-menu" size={32} style = {{paddingLeft : 10 }}/>
+        )
       }
     }
   },
@@ -175,10 +279,7 @@ const LoginStackNavigator = createStackNavigator (
       return {
         headerTitle : () => <LogoTitle />,
         headerLeft : (
-          <Button 
-          title = "Go back"
-          onPress = { () => navigation.navigate('First')}> 
-          </Button>
+          <Ionicons name="md-arrow-back" size={32} style = {{paddingLeft : 10 }} onPress = { () => navigation.navigate('First')}/>
         )
       }
     }}
@@ -192,19 +293,16 @@ const SignUpStackNavigator = createStackNavigator (
       return {
         headerTitle : () => <LogoTitle />,
         headerLeft : (
-          <Button 
-          title = "Go back"
-          onPress = { () => navigation.navigate('First')}> 
-          </Button>
+          <Ionicons name="md-arrow-back" size={32} style = {{paddingLeft : 10 }} onPress = { () => navigation.navigate('First')}/>
         )
       }
     }}
   }
 )
 
-const AppDrawerNavigator = createDrawerNavigator({
+/*const AppDrawerNavigator = createDrawerNavigator({
   Dashboard : {screen : DashboardStackNavigator}
-})
+})*/
 
 // הוספתי בשביל הכותרת למסך הראשי
 const FirstStackNavigator = createStackNavigator (
@@ -234,41 +332,29 @@ const ForgotPasswordStackNavigator = createStackNavigator (
       return {
         headerTitle : () => <LogoTitle />,
         headerLeft : (
-          <Button 
-          title = "Go back"
-          onPress = { () => navigation.navigate('Login')}> 
-          </Button>
+          <Ionicons name="md-arrow-back" size={32} style = {{paddingLeft : 10 }} onPress = { () => navigation.navigate('Login')}/>
         )
       }
     }}
   }
 )
 
-const CreateUserStackNavigator = createStackNavigator (
-  {
-    CreateUser : {screen : CreateUser , navigationOptions : ({navigation}) => {
-      return {
-        headerTitle : () => <LogoTitle />,
-        headerLeft : (
-          <Button 
-          title = "Go back"
-          onPress = { () => navigation.navigate('Login')}> 
-          </Button>
-        )
-      }
-    }}
-  }
-)
 
 const AppSwitchNavigator = createSwitchNavigator(
   {
     First: {screen : FirstStackNavigator },
-    Dashboard : {screen : AppDrawerNavigator},
+    Dashboard : {screen : DashboardStackNavigator},
     //
     Login : {screen : LoginStackNavigator },
     SignUp : {screen : SignUpStackNavigator},
     ForgotPasswordScreen : {screen : ForgotPasswordStackNavigator},
-    CreateUser : {screen : CreateUserStackNavigator}
+    Comments : {screen : DashboardStackNavigator},
+    //
+    Dog : {screen : DashboardStackNavigator}, 
+    Upload : {screen : DashboardStackNavigator},
+    Chat : {screen : DashboardStackNavigator}
+
+
   }
   
 )
