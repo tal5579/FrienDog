@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { Text, View  } from 'react-native';
+import { Text, View,TouchableOpacity  } from 'react-native';
 import { f , auth , database, storage  } from '../../config/config';
 import Button from '../HelpComponents/Button';
 import CardSection from '../HelpComponents/CardSection';
@@ -15,7 +15,7 @@ class ForgotPasswordScreen extends Component{
       return(
         <View style = {{ flex : 1 ,justifyContent : 'center' , alignItems : 'stretch' }}>
             <Logo />
-            <Text style={{fontSize:18,marginLeft:27,fontWeight: 'bold'}}>Please enter your email:</Text>
+            <Text style={{fontSize:18,marginLeft:110,fontWeight: 'bold'}}>Please enter your email:</Text>
             <Card>
                 <CardSection >
                     <Input
@@ -25,13 +25,12 @@ class ForgotPasswordScreen extends Component{
                     onChangeText = {email => this.setState({ email })}
                     />
                 </CardSection>
-                <CardSection>
-                    <Button
-                        onPress = { () => this.props.navigation.navigate('Login'),
-                                     () => this.Userexist(this.state.email)  }>
-                        Send to email 
-                    </Button>
-                </CardSection>
+                <Text></Text>
+                <TouchableOpacity style={styles.buttonContainer}
+                 onPress = { () => this.props.navigation.navigate('Login'),
+                  () => this.Userexist(this.state.email)  }>
+                   <Text style={styles.buttonText}>Send to Email</Text>
+                </TouchableOpacity>
             </Card>
         </View>
       )
@@ -60,4 +59,19 @@ class ForgotPasswordScreen extends Component{
       }
   }
   
+const styles = {
+  buttonText : {
+    textAlign: 'center',
+    color : '#FFFFFF',
+    alignItems: 'stretch'
+  },
+  buttonContainer: {
+    backgroundColor : '#000000',
+    paddingVertical: 10,
+    borderRadius:50,
+    width: 335,
+    alignSelf:'center'
+  }
+}
+
 export default ForgotPasswordScreen;

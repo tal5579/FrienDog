@@ -6,6 +6,7 @@ import Card from '../HelpComponents/Card';
 import CardSection from '../HelpComponents/CardSection';
 import Input from '../HelpComponents/Input';
 import Logo from '../HelpComponents/Logo';
+import * as Facebook from 'expo-facebook';
 
 const DismissKeyboard = ({children}) => (
   <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
@@ -58,6 +59,50 @@ class LoginScreen extends Component {
       alert("Missing email or password")
     }
   }
+
+  initUser(token) {
+    fetch('https://graph.facebook.com/v2.5/me?fields=email,name,friends&access_token=' + token)
+    .then((response) => response.json())
+    .then((json) => {
+      // Some user object has been set up somewhere, build that user here
+      user.name = json.name
+      user.id = json.id
+      user.user_friends = json.friends
+      user.email = json.email
+      user.username = json.name
+      user.loading = false
+      user.loggedIn = true
+      user.avatar = setAvatar(json.id)      
+    })
+    .catch(() => {
+      reject('ERROR GETTING DATA FROM FACEBOOK')
+    })
+    console.log("rrrrrrrrrrr")
+    console.log(user.email)
+  }
+
+  async loginWithFacebook (){   
+    console.log("yyyyyyyyyyyyyyyyyy")
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+        '1027722400896035',
+        { permissions: ['email', 'public_profile'] }
+        
+        
+      );
+      
+      console.log("ttttttttttt")
+      if(type === 'success'){
+        console.log(f.auth.FacebookAuthProvider.arguments)
+        console.log("ttttttttttt")
+        const credentials = f.auth.FacebookAuthProvider.credential(token);
+        f.auth().signInWithCredential(credentials).catch((error) => {
+          console.log('Error...', error);
+        })
+      }
+
+    }
+
+
 
   /*registerUser = (email, password) => {
 
@@ -121,20 +166,18 @@ class LoginScreen extends Component {
                   onChangeText = {password => this.setState({ password })}
                 />
               </CardSection>
-              <CardSection>
-                <Button
-                  onPress = { () => this.loginUser(this.state.email , this.state.password) }>
-                  Login
-                </Button>
-              </CardSection>
-              <CardSection>
-                <View style={styles.row}>
-                  <Text style={styles.label}>Don’t have an account? </Text>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
-                  <Text style={styles.link}>Sign up</Text>
-                  </TouchableOpacity>
-                </View>
-              </CardSection>
+              <Text></Text>
+              <TouchableOpacity style={styles.buttonContainer}
+                onPress = { () => this.loginUser(this.state.email , this.state.password) }>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+              <Text></Text>
+              <View style={styles.row}>
+                <Text style={styles.label}>Don’t have an account? </Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
+                <Text style={styles.link}>Sign up</Text>
+                </TouchableOpacity>
+              </View>
               <CardSection style={styles.forgotPassword}>
                 <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}>
@@ -148,12 +191,17 @@ class LoginScreen extends Component {
               </View>
             )}
             { this.state.emailloginView != true ? (
-            <CardSection>
-              <Button
+              <View>
+                <TouchableOpacity style={styles.buttonContainer} 
                 onPress = { () => this.setState({emailloginView: true})}>
-                Login With Email
-              </Button>
-            </CardSection>
+                  <Text style={styles.buttonText}>Login with email</Text>
+                </TouchableOpacity>
+                <Text></Text>
+                <TouchableOpacity style={styles.buttonContainer} 
+                onPress={() =>  this.loginWithFacebook()}>
+                  <Text style={styles.buttonText}>Login with facebook</Text>
+                </TouchableOpacity>
+              </View>
             ) : (
               <View>
 
@@ -199,13 +247,26 @@ const styles = {
   },
   link: {
     fontWeight: 'bold',
-    color: 'gray',
+    color: 'black',
   },
   lableForgot: {
-    color: 'blue'
+    color: '#1e90ff',
+    fontWeight:'bold'
   },
   label: {
     color: 'gray'
+  },
+  buttonContainer: {
+    backgroundColor : '#000000',
+    paddingVertical: 10,
+    borderRadius:50,
+    width: 335,
+    alignSelf:'center'
+  },
+  buttonText : {
+    textAlign: 'center',
+    color : '#FFFFFF',
+    alignItems: 'stretch'
   },
   forgotPassword: {
     width: '100%',
