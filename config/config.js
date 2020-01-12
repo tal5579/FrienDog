@@ -3,7 +3,6 @@ import firebase from 'firebase';
 //api detalis
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCfRz6z6-V9pOF8syUBFRaItpgRSXnuEXg",
     authDomain: "friendogsce.firebaseapp.com",
     databaseURL: "https://friendogsce.firebaseio.com",
     projectId: "friendogsce",
